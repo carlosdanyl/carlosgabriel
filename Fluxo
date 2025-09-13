@@ -1,0 +1,43 @@
+graph TD
+    subgraph Dispositivo e Redes
+        A[Dispositivo Móvel - UE] --> B(Procurar Redes);
+        B --> C[VPLMN - Rede Visitada];
+        B --> D[HPLMN - Rede Domiciliar];
+    end
+
+    subgraph Processo de Ativação
+        C -->|1. Solicitação de Location Update| E[MME da VPLMN];
+        E -->|2. Encaminhar Solicitação| F[SGW/PGW da VPLMN];
+        F -->|3. Túnel GTP/Diameter| G[HSS da HPLMN];
+        G -->|4. Autenticação e Perfil de Dados| E;
+    end
+
+    subgraph Roteamento do Tráfego (Local Breakout)
+        E -->|5. Permissão de Acesso| H[SGW da VPLMN];
+        H -->|6. Estabelecer Conexão de Dados| I[PGW da VPLMN];
+        I -->|7. Acesso à Internet| J[Servidor Externo - Internet];
+    end
+
+    subgraph Faturação e Controle
+        I --> K[Sistemas de Faturação da VPLMN];
+        K --> L[Intercâmbio de Dados (TAP/NRTRDE)];
+        L --> M[Sistemas de Faturação da HPLMN];
+    end
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style J fill:#f9f,stroke:#333,stroke-width:2px
+
+    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12 stroke:#000,stroke-width:2px
+    linkStyle 1,2,3,4,5,6,7,8,9,10,11,12 stroke-dasharray: 5 5
+
+    subgraph Legenda
+        UE: User Equipment (Dispositivo Móvel)
+        VPLMN: Visited Public Land Mobile Network
+        HPLMN: Home Public Land Mobile Network
+        MME: Mobility Management Entity
+        HSS: Home Subscriber Server
+        SGW: Serving Gateway
+        PGW: Packet Gateway
+        TAP: Transferred Account Procedure
+        NRTRDE: Near Real Time Roaming Data Exchange
+    end
